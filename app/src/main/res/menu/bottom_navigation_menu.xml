@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+      android:id="@+id/tab_mediafire"
+      android:enabled="true"
+      android:icon="@drawable/mediafire_transparent"
+      android:title="Mediafire"/>
+  <item
+      android:id="@+id/tab_gdrive"
+      android:enabled="true"
+      android:icon="@drawable/gdrive_transparent"
+      android:title="GDrive"/>
+    <item
+      android:id="@+id/tab_dropbox"
+      android:enabled="true"
+      android:icon="@drawable/dropbox_transparent"
+      android:title="Dropbox"/>
+</menu>

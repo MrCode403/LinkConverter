@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+      android:id="@+id/main_item"
+      android:title="Tools">
+      <menu>
+        <item
+          android:id="@+id/dmediafire"
+          android:icon="@drawable/mediafire_transparent"
+          android:title="Mediafire"
+          android:checkable="true"
+          app:showAsAction="ifRoom"/>
+        <item
+          android:id="@+id/dgdrive"
+          android:icon="@drawable/gdrive_transparent"
+          android:title="GDrive"
+          android:checkable="true"
+          app:showAsAction="ifRoom"/>
+        <item
+          android:id="@+id/accelerator_item"
+          android:icon="@drawable/dropbox_transparent"
+          android:title="Dropbox"
+          android:checkable="true"
+          app:showAsAction="ifRoom"/>
+      </menu>
+    </item>
+    <item
+      android:id="@+id/labels_item"
+      android:title="Others">
+      <menu>
+        <item
+          android:id="@+id/label_one"
+          android:icon="@android:drawable/ic_info"
+          android:title="Telegram"
+          android:checkable="true"
+          app:showAsAction="ifRoom"/>
+        <item
+          android:id="@+id/label_two"
+          android:icon="@android:drawable/ic_info"
+          android:title="Rate our app"
+          android:checkable="true"
+          app:showAsAction="ifRoom"/>
+      </menu>
+    </item>
+</menu>
