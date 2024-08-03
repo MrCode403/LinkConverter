@@ -14,6 +14,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "dLinks"
+rootProject.name = "LinkConverter"
 
 include(":app")

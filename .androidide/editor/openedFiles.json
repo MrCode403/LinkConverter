@@ -1,35 +1,20 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/dLinks/app/src/main/java/xyz/illuminate/dlinks/MainActivity.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LinkConverter/app/src/main/java/xyz/illuminate/dlinks/MainActivity.java",
       "selection": {
         "end": {
-          "column": 67,
-          "index": 4589,
-          "line": 105
+          "column": 0,
+          "index": 0,
+          "line": 0
         },
         "start": {
-          "column": 67,
-          "index": 4589,
-          "line": 105
-        }
-      }
-    },
-    {
-      "file": "/storage/emulated/0/AndroidIDEProjects/dLinks/app/build.gradle.kts",
-      "selection": {
-        "end": {
-          "column": 36,
-          "index": 1253,
-          "line": 49
-        },
-        "start": {
-          "column": 36,
-          "index": 1253,
-          "line": 49
+          "column": 0,
+          "index": 0,
+          "line": 0
         }
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/dLinks/app/build.gradle.kts"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LinkConverter/app/src/main/java/xyz/illuminate/dlinks/MainActivity.java"
 }

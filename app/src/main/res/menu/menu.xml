@@ -5,9 +5,15 @@
         android:id="@+id/action_tg"
         android:title="Telegram Channel"
         app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/buyCoffe"
+        android:title="Buy Me a Coffe"
+        app:showAsAction="never" />
+    
     <item
         android:id="@+id/rateapp"
-        android:title="Rate our app"
+        android:title="Rate Our App"
         app:showAsAction="never" />
 
 </menu>

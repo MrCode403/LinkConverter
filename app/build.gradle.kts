@@ -42,7 +42,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             signingConfig = signingConfigs.getByName("release")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -62,4 +62,6 @@ android {
 dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation("org.jsoup:jsoup:1.17.2")
+    implementation("com.android.billingclient:billing:5.1.0")
+
 }
