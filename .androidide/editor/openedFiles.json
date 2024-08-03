@@ -1,7 +1,7 @@
 {
   "allFiles": [
     {
-      "file": "/storage/emulated/0/AndroidIDEProjects/LinkConverter/app/src/main/java/xyz/illuminate/dlinks/MainActivity.java",
+      "file": "/storage/emulated/0/AndroidIDEProjects/LinkConverter/app/build.gradle.kts",
       "selection": {
         "end": {
           "column": 0,
@@ -16,5 +16,5 @@
       }
     }
   ],
-  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LinkConverter/app/src/main/java/xyz/illuminate/dlinks/MainActivity.java"
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/LinkConverter/app/build.gradle.kts"
 }
