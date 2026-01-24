@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -419,7 +420,9 @@ public class MainActivity extends AppCompatActivity {
         for (Pattern format : FORMAT_REGEXES) {
             Matcher matcher = format.matcher(urlOrId);
             if (matcher.find()) {
-                return matcher.group("id");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    return matcher.group("id");
+                }
             }
         }
 
