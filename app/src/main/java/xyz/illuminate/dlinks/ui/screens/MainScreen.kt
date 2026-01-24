@@ -45,6 +45,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.CheckCircle
@@ -138,7 +139,7 @@ fun LinkConverterScreen(
                                 )
                             },
                             leadingIcon = {
-                                Icon(Icons.Default.Send, null)
+                                Icon(Icons.AutoMirrored.Filled.Send, null)
                             }
                         )
                         DropdownMenuItem(
