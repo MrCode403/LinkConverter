@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "xyz.illuminate.dlinks"
-    compileSdk = 33
+    compileSdk = 36
     
     defaultConfig {
         applicationId = "xyz.illuminate.dlinks"
-        minSdk = 21
-        targetSdk = 33
+        minSdk = 26
+        targetSdk = 36
         versionCode = 2
         versionName = "2.0"
         
@@ -60,8 +60,8 @@ android {
 }
 
 dependencies {
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("org.jsoup:jsoup:1.17.2")
-    implementation("com.android.billingclient:billing:5.1.0")
+    implementation("com.google.android.material:material:1.13.0")
+    implementation("org.jsoup:jsoup:1.22.1")
+    implementation("com.android.billingclient:billing:8.3.0")
 
 }
