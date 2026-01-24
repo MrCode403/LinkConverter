@@ -9,37 +9,29 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeParams;
-import com.android.billingclient.api.ConsumeResponseListener;
-import com.android.billingclient.api.BillingFlowParams;
-import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.PendingPurchasesParams;
 import com.android.billingclient.api.ProductDetails;
-import com.android.billingclient.api.ProductDetailsResponseListener;
 import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.QueryProductDetailsParams;
-import com.android.billingclient.api.QueryPurchasesParams;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,7 +40,6 @@ import xyz.illuminate.dlinks.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
     
     private ActivityMainBinding binding;
-    BottomNavigationView bottomnav;
     String linkType;
     String convertedLink;
 
@@ -57,9 +48,7 @@ public class MainActivity extends AppCompatActivity {
             Pattern.compile("https://drive\\.google\\.com/open\\?id=(?<id>.*)$")
     };
     private static final Pattern ALPHANUMERIC_REGEX = Pattern.compile("^[\\w-]+$");
-    
-    
-    boolean readyToPurchase;
+
     
     String PRODUCT_ID = "PRODUCT1";
     String NO_ADS = "NO_ADS";
@@ -80,19 +69,17 @@ public class MainActivity extends AppCompatActivity {
 
         switchView("m");
 
-        binding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.action_tg) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/team_illuminate")));
-                } if (item.getItemId()==R.id.buyCoffe) {
-                    GetSingleInAppDetail();
-                } else if (item.getItemId() == R.id.rateapp) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=xyz.illuminate.dlinks")));
-                }
-
-                return false;
+        binding.toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_tg) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/team_illuminate")));
             }
+            if (item.getItemId() == R.id.buyCoffe) {
+                GetSingleInAppDetail();
+            } else if (item.getItemId() == R.id.rateapp) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=xyz.illuminate.dlinks")));
+            }
+
+            return false;
         });
 
         binding.output.setMaxLines(2);
@@ -173,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
         
         
         billingClient = BillingClient.newBuilder(this)
-                .enablePendingPurchases()
+                .enablePendingPurchases(PendingPurchasesParams.newBuilder().build())
                 .setListener(
                         (billingResult, list) -> {
 
@@ -201,13 +188,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
                 if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-
-                    // The BillingClient is ready. You can query purchases here.
-
-                    //Use any of function below to get details upon successful connection
-
                     GetSingleInAppDetail();
-                    //GetListsInAppDetail();
 
                     Log.d("Falcon", "Connection Established");
                 }
@@ -215,8 +196,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
                 Log.d("Falcon", "Connection NOT Established");
                 establishConnection();
             }
@@ -238,20 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 .setProductList(productList)
                 .build();
 
-        billingClient.queryProductDetailsAsync(params, new ProductDetailsResponseListener() {
-            @Override
-            public void onProductDetailsResponse(@NonNull BillingResult billingResult, @NonNull List<ProductDetails> list) {
-
-                //Do Anything that you want with requested product details
-
-                //Calling this function here so that once products are verified we can start the purchase behavior.
-                //You can save this detail in separate variable or list to call them from any other location
-                //Create another function if you want to call this in establish connections' success state
-                LaunchPurchaseFlow(list.get(0));
-
-
-            }
-        });
+        billingClient.queryProductDetailsAsync(params, (billingResult, queryProductDetailsResult) -> LaunchPurchaseFlow(queryProductDetailsResult.getProductDetailsList().get(0)));
     }
 
     void GetListsInAppDetail() {
@@ -270,30 +236,22 @@ public class MainActivity extends AppCompatActivity {
                 .setProductList(productList)
                 .build();
 
-        billingClient.queryProductDetailsAsync(params, new ProductDetailsResponseListener() {
-            @Override
-            public void onProductDetailsResponse(@NonNull BillingResult billingResult, @NonNull List<ProductDetails> list) {
-
-                for (ProductDetails li : list) {
-                    Log.d("Falcon", "IN APP item Price" + li.getOneTimePurchaseOfferDetails().getFormattedPrice());
-                }
-                //Do Anything that you want with requested product details
+        billingClient.queryProductDetailsAsync(params, (billingResult, queryProductDetailsResult) -> {
+            for (ProductDetails li : queryProductDetailsResult.getProductDetailsList()) {
+                Log.d("Falcon", "IN APP item Price" + li.getOneTimePurchaseOfferDetails().getFormattedPrice());
             }
+
         });
     }
 
-    //This function will be called in handlepurchase() after success of any consumeable purchase
     void ConsumePurchase(Purchase purchase) {
         ConsumeParams params = ConsumeParams.newBuilder()
                 .setPurchaseToken(purchase.getPurchaseToken())
                 .build();
-        billingClient.consumeAsync(params, new ConsumeResponseListener() {
-            @Override
-            public void onConsumeResponse(@NonNull BillingResult billingResult, @NonNull String s) {
+        billingClient.consumeAsync(params, (billingResult, s) -> {
 
-                Log.d("TAG", "Consuming Successful: "+s);
-                Toast.makeText(MainActivity.this,"Product Consumed",Toast.LENGTH_SHORT).show();
-            }
+            Log.d("TAG", "Consuming Successful: " + s);
+            Toast.makeText(MainActivity.this, "Product Consumed", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -325,8 +283,6 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("Falcon", "Purchase is successful");
                             //tv_status.setText("Yay! Purchased");
                                 Toast.makeText(MainActivity.this,"Yay! Purchased",Toast.LENGTH_SHORT).show();
-                            //Calling Consume to consume the current purchase
-                            // so user will be able to buy same product again
                             ConsumePurchase(purchases);
                         }
                     }
@@ -339,47 +295,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-    }
-
-    void restorePurchases() {
-
-        billingClient = BillingClient.newBuilder(this).enablePendingPurchases().setListener((billingResult, list) -> {
-        }).build();
-        final BillingClient finalBillingClient = billingClient;
-        billingClient.startConnection(new BillingClientStateListener() {
-            @Override
-            public void onBillingServiceDisconnected() {
-            }
-
-            @Override
-            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
-
-                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                    finalBillingClient.queryPurchasesAsync(
-                            QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build(), (billingResult1, list) -> {
-                                if (billingResult1.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-                                    if (list.size() > 0) {
-
-                                        Log.d("TAG", "IN APP SUCCESS RESTORE: " + list);
-                                        for (int i = 0; i < list.size(); i++) {
-
-                                            if (list.get(i).getProducts().contains(PRODUCT_ID)) {
-                                                //tv_status.setText("Premium Restored");
-                                                Toast.makeText(MainActivity.this,"Premium Restored",Toast.LENGTH_SHORT).show();
-                                                Log.d("TAG", "Product id "+PRODUCT_ID+" will restore here");
-                                            }
-
-                                        }
-                                    } else {
-                                        //tv_status.setText("Nothing found to Restored");
-                                        Log.d("TAG", "In APP Not Found To Restore");
-                                        Toast.makeText(MainActivity.this,"Nothing found to Restored",Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                }
-            }
-        });
     }
 
     private void switchView(String type) {
