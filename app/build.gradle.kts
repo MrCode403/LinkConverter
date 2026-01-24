@@ -1,7 +1,7 @@
 
 plugins {
-    id("com.android.application")
-    
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -12,8 +12,8 @@ android {
         applicationId = "xyz.illuminate.dlinks"
         minSdk = 26
         targetSdk = 36
-        versionCode = 2
-        versionName = "2.0"
+        versionCode = 6
+        versionName = "6.0"
         
         vectorDrawables { 
             useSupportLibrary = true
@@ -21,9 +21,10 @@ android {
     }
     
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     
     signingConfigs {
          getByName("debug") {
@@ -53,15 +54,44 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
-        
+        compose = true
     }
     
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.10"
+    }
+    
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 dependencies {
-    implementation("com.google.android.material:material:1.13.0")
-    implementation("org.jsoup:jsoup:1.22.1")
-    implementation("com.android.billingclient:billing:8.3.0")
-
+    // Compose BOM
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    
+    // Core & Lifecycle
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.activity.compose)
+    
+    // Material 3
+    implementation(libs.material3)
+    
+    // Jsoup for link parsing
+    implementation(libs.jsoup)
+    
+    // Billing
+    implementation(libs.billing)
+    implementation(libs.billing.ktx)
 }
